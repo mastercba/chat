@@ -51,6 +51,8 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -70,17 +72,22 @@ class __FormState extends State<_Form> {
           ),
           BotonAzul(
             text: 'Ingrese',
-            onPressed: () {
-              print('botonAzul - Ingrese');
-              print(emailCtrl.text);
-              print(passCtrl.text);
-              //usamos nuestro provider para mandar a llamar esto
-              //listen:false para que no intente redibujar el widget
-              //solo necesito la referencia, para llamar el authservice.login
-              final authService =
-                  Provider.of<AuthService>(context, listen: false);
-              authService.login(emailCtrl.text.trim(), passCtrl.text.trim());
-            },
+            onPressed: authService.autenticando
+                ? null
+                : () {
+                    //quita el focus donde sea que este y oculto el teclado
+                    FocusScope.of(context).unfocus();
+                    //print('botonAzul - Ingrese');
+                    //print(emailCtrl.text);
+                    //print(passCtrl.text);
+                    //usamos nuestro provider para mandar a llamar esto
+                    //listen:false para que no intente redibujar el widget
+                    //solo necesito la referencia, para llamar el authservice.login
+                    //final authService =
+                    //    Provider.of<AuthService>(context, listen: false);
+                    authService.login(
+                        emailCtrl.text.trim(), passCtrl.text.trim());
+                  },
           )
         ],
       ),

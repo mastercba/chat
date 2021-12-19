@@ -18,8 +18,25 @@ class AuthService with ChangeNotifier {
   // Usuario usuario;??
   Usuario usuario;
 
+  //bloquear el boton de ingrese p/ k no se pueda hacer doble posteo
+  bool _autenticando = false; //propiedad indica cuando se esta autenticando
+  //como es privada entonces tengo que hacer con getters y setters;
+  //y asi cuando se cambie la propiedad _autenticando a true o false,
+  //=> notficara a los listeners es decir que cualquier persona o widget
+  //que este escuchando los cambios de mi AuthService va a ser notificado
+  //cuando cambie esa propiedad....este es uno de los usos de provider!!!!!
+  //con guion bajo es privada solo aqui, y sin guion bajo aparce afuera!!!
+  bool get autenticando => this._autenticando;
+  set autenticando(bool valor) {
+    this._autenticando = valor;
+    notifyListeners(); //notifica a todos los k estan escuchando _autenticando
+    //para que se redibuje
+  }
+
   //tengo que crear un metodo  future recibe email y password
   Future login(String email, String password) async {
+    this.autenticando = true;
+
     //var url = Uri.parse('http://10.0.2.2:3000/api/login');
     var urlLogin = Uri.parse('${Environment.apiUrl}/login');
 
@@ -41,10 +58,13 @@ class AuthService with ChangeNotifier {
       this.usuario = loginResponse.usuario;
 
 //      await this._guardarToken(loginResponse.token);
-
-      return true;
-    } else {
-      return false;
     }
+//      return true;
+//    } else {
+//      return false;
+//    }
+    // hacemos lo inversa, ya sea que la info sea o no la correcta
+    //ppero ya tenemos la informacion, => quitamos el loading!
+    this.autenticando = false;
   }
 }
