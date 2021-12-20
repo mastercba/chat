@@ -26,7 +26,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Chat App',
-        initialRoute: 'login',
+        //en la pantalla de loadingPage, me sirve para determinar si la
+        //persona tiene un token valido;
+        // funciona    : va a usuarios
+        // NO funciona : va a login
+        initialRoute: 'loading',
         routes: appRoutes,
       ),
     );
